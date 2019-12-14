@@ -33,3 +33,4 @@ release: check-api-token check-app deps-vendor-cli
 		--version $(version) \
 		--release-notes $(release_notes) \
 		--ensure-channel
+
