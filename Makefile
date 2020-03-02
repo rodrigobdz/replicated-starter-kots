@@ -2,27 +2,27 @@ SHELL := /bin/bash -o pipefail
 
 app_slug := "${REPLICATED_APP}"
 
-# Generate release notes that provide origin details. 
+# Generate release notes that provide origin details.
 ifeq ($(origin GITHUB_ACTIONS), undefined)
 release_notes := "CLI release of $(shell git symbolic-ref HEAD) triggered by ${shell git log -1 --pretty=format:'%ae'}: $(shell basename $$(git remote get-url origin) .git) [SHA: $(shell git rev-parse HEAD)]"
-else 
+else
 release_notes := "GitHub Action release of ${GITHUB_REF} triggered by ${GITHUB_ACTOR}: [$(shell echo $${GITHUB_SHA::7})](https://github.com/${GITHUB_REPOSITORY}/commit/${GITHUB_SHA})"
-endif 
+endif
 
-# If tag is set and we're using github_actions, that takes precedence and we release on the beta channel. 
+# If tag is set and we're using github_actions, that takes precedence and we release on the beta channel.
 # Otherwise, get the branch use to build version and release on that channel
 ifeq ($(origin GITHUB_TAG_NAME),undefined)
 ifeq ($(origin GITHUB_BRANCH_NAME),undefined)
 channel := $(shell git rev-parse --abbrev-ref HEAD)
-else 
+else
 channel := ${GITHUB_BRANCH_NAME}
-endif 
+endif
 # Translate "Master" to "Unstable", if on that branch
 ifeq ($(channel), master)
 channel := Unstable
-endif 
+endif
 version := $(channel)-$(shell git rev-parse HEAD | head -c7)$(shell git diff --no-ext-diff --quiet --exit-code || echo "-dirty")
-else 
+else
 channel := "Beta"
 version := ${GITHUB_TAG_NAME}
 endif
@@ -32,7 +32,7 @@ deps-vendor-cli: dist = $(shell echo `uname` | tr '[:upper:]' '[:lower:]')
 deps-vendor-cli: cli_version = ""
 deps-vendor-cli: cli_version = $(shell [[ -x deps/replicated ]] && deps/replicated version | grep version | head -n1 | cut -d: -f2 | tr -d , )
 
-deps-vendor-cli: 
+deps-vendor-cli:
 	@if [[ -n "$(cli_version)" ]]; then \
 	  echo "CLI version $(cli_version) already downloaded, to download a newer version, run 'make upgrade-cli'"; \
 	  exit 0; \
@@ -51,6 +51,7 @@ deps-vendor-cli:
 upgrade-cli:
 	rm -rf deps
 	@$(MAKE) deps-vendor-cli
+	deps/replicated version
 
 .PHONY: lint
 lint: check-api-token check-app deps-vendor-cli
@@ -79,5 +80,5 @@ release: check-api-token check-app deps-vendor-cli lint
 		--ensure-channel
 
 
-# Preserving for backwards compatibility (behavior was merged on release). 
+# Preserving for backwards compatibility (behavior was merged on release).
 gitsha-release: release
