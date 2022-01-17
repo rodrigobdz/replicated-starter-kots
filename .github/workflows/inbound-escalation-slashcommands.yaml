@@ -13,7 +13,13 @@ jobs:
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
-                    core.info(context);
+                    const PROJECT_NAME = "Inbound Escalations";
+                    const NEW_COLUMN = "New";
+                    const OPEN_COLUMN = "Open";
+                    const PENDING_COLUMN = "Pending";
+                    const CLOSED_COLUMN = "Closed";
+
+            core.info(context);
                     console.log(context);
                     try {
                       const membership = await github.orgs.checkPublicMembershipForUser({
@@ -34,10 +40,10 @@ jobs:
                     const projects = await github.projects.listForRepo({ owner, repo });
                     // there should always be exactly one
                     const escalationProj = projects.data.filter(
-                      (p) => p.name.indexOf("Inbound Escalations") !== -1
+                      (p) => p.name.indexOf(PROJECT_NAME) !== -1
                     )[0];
                     if (!escalationProj) {
-                      core.setFailed("Could not find a board called 'Inbound Escalations'");
+                      core.setFailed("Could not find a project called " + PROJECT_NAME);
                     }
                     core.info("found escalation project");
                     const columns = await github.projects.listColumns({
@@ -76,18 +82,18 @@ jobs:
                      * [{card1}, {card2}]
                      */
                     const flatCards = allCards.map((c) => c.data).flat();
-                    // Assume there is at least one card on the board that matches the issue here
+                    // Assume there is at least one card on the project that matches the issue here
                     const thisCard = flatCards.filter(
                       (c) => c.content_url === context.payload.issue.url
                     )[0];
                     if (!thisCard) {
-                      core.setFailed("Could not find a card on the Inbound Escalations board that matches this issue");
+                      core.setFailed("Could not find a card on the project that matches this issue. Project was " + PROJECT_NAME);
                     }
                     core.info("found matching card for commented issue");
-                    const openColumn = columns.data.filter((c) => c.name == "Open")[0];
-                    const closedColumn = columns.data.filter((c) => c.name == "Closed")[0];
-                    const pendingColumn = columns.data.filter((c) => c.name == "Pending")[0];
-                    
+                    const openColumn = columns.data.filter((c) => c.name == NEW_COLUMN)[0];
+                    const pendingColumn = columns.data.filter((c) => c.name == PENDING_COLUMN)[0];
+                    const closedColumn = columns.data.filter((c) => c.name == CLOSED_COLUMN)[0];
+
                     if (context.payload.comment.body.indexOf("/open") !== -1) {
                       core.info("moving to Open");
                       github.projects.moveCard({
