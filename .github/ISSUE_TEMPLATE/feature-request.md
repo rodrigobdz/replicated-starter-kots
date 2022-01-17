@@ -2,7 +2,7 @@
 name: Feature request
 about: Request a feature for Replicated
 title: 'Title: Brief summary of the feature request'
-labels: 'project::enhancements'
+labels: 'kind::feature-request'
 assignees: ''
 ---
 
