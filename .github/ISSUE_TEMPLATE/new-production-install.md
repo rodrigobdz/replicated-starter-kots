@@ -2,7 +2,7 @@
 name: New Production Install
 about: Document a new target install scenario for a single end user
 title: 'New Installation: [CUSTOMER]'
-labels: project::new-production-install
+labels: kind::customer
 assignees: ''
 
 ---

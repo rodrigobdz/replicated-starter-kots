@@ -5,11 +5,18 @@ on:
 name: Issue Comments
 jobs:
   check_comments:
-    name: Create matching CH issue
+    name: Create matching SC issue
     runs-on: ubuntu-latest
     steps:
       - uses: actions/github-script@v3
-        if: "contains(github.event.comment.body, '/clubhouse') && ! contains(join(github.event.issue.labels.*.name, ' '), 'ch/')"
+        if: >
+          (
+            contains(github.event.comment.body, '/clubhouse')
+            && ! contains(join(github.event.issue.labels.*.name, ' '), 'ch/')
+          ) || (
+            contains(github.event.comment.body, '/shortcut')
+            && ! contains(join(github.event.issue.labels.*.name, ' '), 'sc::')
+          )
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
@@ -26,8 +33,15 @@ jobs:
             }
 
       - name: Create CH Issue
-        if: "contains(github.event.comment.body, '/clubhouse') && ! contains(join(github.event.issue.labels.*.name, ' '), 'ch/')"
-        id: create-ch
+        if: >
+          (
+            contains(github.event.comment.body, '/clubhouse')
+            && ! contains(join(github.event.issue.labels.*.name, ' '), 'ch/')
+          ) || (
+            contains(github.event.comment.body, '/shortcut')
+            && ! contains(join(github.event.issue.labels.*.name, ' '), 'sc::')
+          )
+        id: create-sc
         uses: docker://dexhorthy/gh-to-zap:1
         env:
           COMMENT: ${{ github.event.comment.body }}

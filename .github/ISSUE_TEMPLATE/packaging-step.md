@@ -3,9 +3,8 @@ name: Packaging Step
 about: Track integration / packaging work that needs to be done to improve reliability
   or get the application ready for a particular customer environment
 title: ''
-labels: project::packaging-step
+labels: kind::packaging-step
 assignees: ''
-
 ---
 
 ### Problem to solve
