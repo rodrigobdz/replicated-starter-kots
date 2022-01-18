@@ -131,3 +131,55 @@ jobs:
                         state: "open",
                       });
                     }
+  process_slash_commands:
+    name: Apply Slash Commands from Issue Comment
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v3
+        if: "contains(github.event.comment.body, '/open') || contains(github.event.comment.body, '/pending') || contains(github.event.comment.body, '/close')"
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            try {
+              const membership = await github.orgs.checkPublicMembershipForUser({
+                org: "replicatedhq",
+                username: context.payload.comment.user.login,
+              });
+              if (!membership.status === 204) {
+                core.setFailed("failed to verify repo membership");
+              }
+            } catch (e) {
+              core.setFailed("failed to verify repo membership");
+            }
+            if (context.payload.comment.body.indexOf("/open") !== -1) {
+              core.info("Adding label Open");
+              github.issues.addLabels({
+                owner: context.payload.repository.owner.login,
+                repo: context.payload.repository.name,
+                issue_number: context.payload.issue.number,
+                labels: ['status::open'],
+              })
+            } else if (context.payload.comment.body.indexOf("/close") !== -1) {
+              core.info("Adding label Closed");
+              github.issues.addLabels({
+                owner: context.payload.repository.owner.login,
+                repo: context.payload.repository.name,
+                issue_number: context.payload.issue.number,
+                labels: ['status::closed'],
+              })
+              /* Add this in once the other script is not processing slash commands
+              github.issues.update({
+                owner, repo,
+                issue_number: context.payload.issue.number,
+                state: "closed",
+              });
+              */
+            } else if (context.payload.comment.body.indexOf("/pending") !== -1) {
+              core.info("Adding label Pending");
+              github.issues.addLabels({
+                owner: context.payload.repository.owner.login,
+                repo: context.payload.repository.name,
+                issue_number: context.payload.issue.number,
+                labels: ['status::pending'],
+              })
+            }
