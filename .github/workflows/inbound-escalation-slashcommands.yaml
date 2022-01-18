@@ -19,7 +19,7 @@ jobs:
                     const PENDING_COLUMN = "Pending";
                     const CLOSED_COLUMN = "Closed";
 
-            core.info(context);
+                    core.info(context);
                     console.log(context);
                     try {
                       const membership = await github.orgs.checkPublicMembershipForUser({
@@ -153,6 +153,7 @@ jobs:
             }
             if (context.payload.comment.body.indexOf("/open") !== -1) {
               core.info("Adding label Open");
+              await removeStatusLabels();
               github.issues.addLabels({
                 owner: context.payload.repository.owner.login,
                 repo: context.payload.repository.name,
@@ -161,6 +162,7 @@ jobs:
               })
             } else if (context.payload.comment.body.indexOf("/close") !== -1) {
               core.info("Adding label Closed");
+              await removeStatusLabels();
               github.issues.addLabels({
                 owner: context.payload.repository.owner.login,
                 repo: context.payload.repository.name,
@@ -176,10 +178,44 @@ jobs:
               */
             } else if (context.payload.comment.body.indexOf("/pending") !== -1) {
               core.info("Adding label Pending");
+              await removeStatusLabels();
               github.issues.addLabels({
                 owner: context.payload.repository.owner.login,
                 repo: context.payload.repository.name,
                 issue_number: context.payload.issue.number,
                 labels: ['status::pending'],
               })
+            }
+
+            async function removeStatusLabels() {
+              try {
+                await github.issues.removeLabel({
+                  owner: context.payload.repository.owner.login,
+                  repo: context.payload.repository.name,
+                  issue_number: context.payload.issue.number,
+                  name: 'status::open',
+                })
+              } catch (e) {
+                core.info("Couldn't remove status::open")
+              }
+              try {
+                await github.issues.removeLabel({
+                  owner: context.payload.repository.owner.login,
+                  repo: context.payload.repository.name,
+                  issue_number: context.payload.issue.number,
+                  name: 'status::pending',
+                })
+              } catch (e) {
+                core.info("Couldn't remove status::pending")
+              }
+              try {
+                await github.issues.removeLabel({
+                  owner: context.payload.repository.owner.login,
+                  repo: context.payload.repository.name,
+                  issue_number: context.payload.issue.number,
+                  name: 'status::closed',
+                })
+              } catch (e) {
+                core.info("Couldn't remove status::closed")
+              }
             }
