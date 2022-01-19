@@ -137,7 +137,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/github-script@v3
-        if: "contains(github.event.comment.body, '/open') || contains(github.event.comment.body, '/pending') || contains(github.event.comment.body, '/close')"
+        if: "contains(github.event.issue.labels.*.name, 'inbound-escalation')"
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
