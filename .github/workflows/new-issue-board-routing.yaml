@@ -1,4 +1,4 @@
-
+---
 on:
   issues:
     types: [opened]
@@ -8,7 +8,7 @@ jobs:
   ie-project:
     name: Add issue to the Inbound Escalations project
     runs-on: ubuntu-latest
-    if: "contains(join(github.event.issue.labels.*.name, ' '), 'inbound-escalation')" 
+    if: "contains(join(github.event.issue.labels.*.name, ' '), 'inbound-escalation')"
     steps:
       - uses: actions/github-script@v3
         with:
@@ -36,7 +36,7 @@ jobs:
                   core.setFailed("Could not find a column called " + NEW_COLUMN);
                 }
                 core.info("New issues column project");
-                
+
                 await github.projects.createCard({
                   column_id: newIssuesColumn.id,
                   content_id: context.payload.issue.id,
