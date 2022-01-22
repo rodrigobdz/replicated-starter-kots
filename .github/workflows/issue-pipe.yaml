@@ -13,10 +13,12 @@ jobs:
         if: >
           (
             contains(github.event.comment.body, '/clubhouse')
-            && ! contains(join(github.event.issue.labels.*.name, ' '), 'ch/')
+            && ! contains(join(github.event.issue.labels.*.name, ' '), 'ch/'
+            && ! contains(join(github.event.issue.labels.*.name, ' '), 'sc::')
           ) || (
             contains(github.event.comment.body, '/shortcut')
-            && ! contains(join(github.event.issue.labels.*.name, ' '), 'sc::')
+            && ! contains(join(github.event.issue.labels.*.name, ' '), 'sc::'
+            && ! contains(join(github.event.issue.labels.*.name, ' '), 'ch/')
           )
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
