@@ -15,8 +15,8 @@ jobs:
             contains(github.event.comment.body, '/clubhouse') ||
             contains(github.event.comment.body, '/shortcut')
           ) &&  ! (
-            contains(join(github.event.issue.labels.*.name, ' '), 'ch/' ||
-            contains(join(github.event.issue.labels.*.name, ' '), 'sc::'
+            contains(join(github.event.issue.labels.*.name, ' '), 'ch/') ||
+            contains(join(github.event.issue.labels.*.name, ' '), 'sc::')
           )
 
         with:
@@ -40,8 +40,8 @@ jobs:
             contains(github.event.comment.body, '/clubhouse') ||
             contains(github.event.comment.body, '/shortcut')
           ) &&  ! (
-            contains(join(github.event.issue.labels.*.name, ' '), 'ch/' ||
-            contains(join(github.event.issue.labels.*.name, ' '), 'sc::'
+            contains(join(github.event.issue.labels.*.name, ' '), 'ch/') ||
+            contains(join(github.event.issue.labels.*.name, ' '), 'sc::')
           )
         id: create-sc
         uses: docker://dexhorthy/gh-to-zap:1
