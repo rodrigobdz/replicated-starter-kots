@@ -12,14 +12,13 @@ jobs:
       - uses: actions/github-script@v3
         if: >
           (
-            contains(github.event.comment.body, '/clubhouse')
-            && ! contains(join(github.event.issue.labels.*.name, ' '), 'ch/'
-            && ! contains(join(github.event.issue.labels.*.name, ' '), 'sc::')
-          ) || (
+            contains(github.event.comment.body, '/clubhouse') ||
             contains(github.event.comment.body, '/shortcut')
-            && ! contains(join(github.event.issue.labels.*.name, ' '), 'sc::'
-            && ! contains(join(github.event.issue.labels.*.name, ' '), 'ch/')
+          ) &&  ! (
+            contains(join(github.event.issue.labels.*.name, ' '), 'ch/' ||
+            contains(join(github.event.issue.labels.*.name, ' '), 'sc::'
           )
+
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
@@ -38,11 +37,11 @@ jobs:
       - name: Create CH Issue
         if: >
           (
-            contains(github.event.comment.body, '/clubhouse')
-            && ! contains(join(github.event.issue.labels.*.name, ' '), 'ch/')
-          ) || (
+            contains(github.event.comment.body, '/clubhouse') ||
             contains(github.event.comment.body, '/shortcut')
-            && ! contains(join(github.event.issue.labels.*.name, ' '), 'sc::')
+          ) &&  ! (
+            contains(join(github.event.issue.labels.*.name, ' '), 'ch/' ||
+            contains(join(github.event.issue.labels.*.name, ' '), 'sc::'
           )
         id: create-sc
         uses: docker://dexhorthy/gh-to-zap:1
