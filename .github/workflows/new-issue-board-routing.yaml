@@ -94,7 +94,7 @@ jobs:
           script: |
             const PROJECT_NAME = "Enhancements";
             const trackedLabel = context.payload.issue.labels.filter(label => label.name === "enhancements::tracked");
-            const COLUMN = trackedLabel ? "Tracked" : "New";
+            const COLUMN = trackedLabel.length ? "Tracked" : "New";
 
             const projects = await github.projects.listForRepo({
               owner: context.payload.repository.owner.login,
