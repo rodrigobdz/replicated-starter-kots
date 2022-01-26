@@ -52,7 +52,7 @@ jobs:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
             const PROJECT_NAME = "New Production Installs";
-            const NOT_READY_COLUMN = "Not Ready";
+            const COLUMN = "Not Ready";
             const projects = await github.projects.listForRepo({
               owner: context.payload.repository.owner.login,
               repo: context.payload.repository.name,
@@ -68,14 +68,14 @@ jobs:
             const columns = await github.projects.listColumns({
               project_id: escalationProj.id,
             });
-            const newIssuesColumn = columns.data.filter((c) => c.name == NOT_READY_COLUMN)[0];
-            if (!newIssuesColumn) {
-              core.setFailed("Could not find a column called " + NOT_READY_COLUMN);
+            const notReadyColumn = columns.data.filter((c) => c.name == COLUMN)[0];
+            if (!notReadyColumn) {
+              core.setFailed("Could not find a column called " + COLUMN);
             }
             core.info("New issues column project");
 
             await github.projects.createCard({
-              column_id: newIssuesColumn.id,
+              column_id: notReadyColumn.id,
               content_id: context.payload.issue.id,
               content_type: "Issue",
             })
@@ -83,15 +83,19 @@ jobs:
     name: Add issue to the Enhancements project
     runs-on: ubuntu-latest
     if: >
-      contains(join(github.event.issue.labels.*.name, ' '), 'kind::bug')
-      || contains(join(github.event.issue.labels.*.name, ' '), 'kind::feature-request')
+      (
+        contains(join(github.event.issue.labels.*.name, ' '), 'kind::bug')
+        || contains(join(github.event.issue.labels.*.name, ' '), 'kind::feature-request')
+      )
     steps:
       - uses: actions/github-script@v3
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
             const PROJECT_NAME = "Enhancements";
-            const NOT_READY_COLUMN = "New";
+            const trackedLabel = context.payload.issue.labels.filter(label => label.name === "enhancements::tracked");
+            const COLUMN = trackedLabel ? "Tracked" : "New";
+
             const projects = await github.projects.listForRepo({
               owner: context.payload.repository.owner.login,
               repo: context.payload.repository.name,
@@ -107,14 +111,14 @@ jobs:
             const columns = await github.projects.listColumns({
               project_id: escalationProj.id,
             });
-            const newIssuesColumn = columns.data.filter((c) => c.name == NOT_READY_COLUMN)[0];
-            if (!newIssuesColumn) {
-              core.setFailed("Could not find a column called " + NOT_READY_COLUMN);
+            const issueColumn = columns.data.filter((c) => c.name == COLUMN)[0];
+            if (!issueColumn) {
+              core.setFailed("Could not find a column called " + COLUMN);
             }
             core.info("New issues column project");
 
             await github.projects.createCard({
-              column_id: newIssuesColumn.id,
+              column_id: issueColumn.id,
               content_id: context.payload.issue.id,
               content_type: "Issue",
             })
