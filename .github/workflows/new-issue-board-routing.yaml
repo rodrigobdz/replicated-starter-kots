@@ -91,7 +91,7 @@ jobs:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
             const PROJECT_NAME = "Enhancements";
-            const NOT_READY_COLUMN = "Not Ready";
+            const NOT_READY_COLUMN = "New";
             const projects = await github.projects.listForRepo({
               owner: context.payload.repository.owner.login,
               repo: context.payload.repository.name,
