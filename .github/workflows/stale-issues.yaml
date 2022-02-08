@@ -1,0 +1,23 @@
+name: 'Close stale issues'
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 3 * * *'
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/stale@v4
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN}}
+          operations-per-run: 100
+          days-before-stale: 4
+          days-before-close: 2
+          stale-issue-message: 'This issue is being marked as stale due to inactivity and will be closed if it remains inactive.'
+          close-issue-message: 'This issue is being closed due to inactivity. If you are still experiencing this issue you can reopen it. If you have a new occurrence of a similar issue consider creating a new issue, you can reference this issue in the new issue if necessary.'
+          stale-issue-label: 'status::stale'
+          close-issue-label: 'status::closed'
+          any-of-labels: 'kind::inbound-escalation,inbound-escalation'
+          only-labels: 'status::pending'
+          debug-only: true
