@@ -20,4 +20,4 @@ jobs:
           close-issue-label: 'status::closed'
           any-of-labels: 'kind::inbound-escalation,inbound-escalation'
           only-labels: 'status::pending'
-          debug-only: true
+          debug-only: false
