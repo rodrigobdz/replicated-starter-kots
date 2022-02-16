@@ -157,8 +157,8 @@ jobs:
                 repo: context.payload.repository.name,
                 issue_number: context.payload.issue.number,
               });
-              if (currentLabels.data.filter(obj => {return obj.name === 'status::pending'}).length){
-                core.info("Setting pending issue back to open");
+              if (currentLabels.data.filter(obj => {return (obj.name === 'status::pending' || obj.name === 'status::closed')}).length) {
+                core.info("Setting pending or closed issue back to open");
                 await removeStatusLabels(context, github, core);
                 github.issues.addLabels({
                   owner: context.payload.repository.owner.login,
