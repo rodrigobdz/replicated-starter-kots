@@ -17,7 +17,7 @@ jobs:
           ) &&  ! (
             contains(join(github.event.issue.labels.*.name, ' '), 'ch/') ||
             contains(join(github.event.issue.labels.*.name, ' '), 'sc::')
-          )
+          ) && ! contains(join(github.event.issue.labels.*.name, ' '), 'kind::inbound-escalation')
 
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
@@ -42,7 +42,7 @@ jobs:
           ) &&  ! (
             contains(join(github.event.issue.labels.*.name, ' '), 'ch/') ||
             contains(join(github.event.issue.labels.*.name, ' '), 'sc::')
-          )
+          ) && ! contains(join(github.event.issue.labels.*.name, ' '), 'kind::inbound-escalation')
         id: create-sc
         uses: docker://dexhorthy/gh-to-zap:1
         env:
