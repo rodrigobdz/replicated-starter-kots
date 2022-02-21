@@ -18,6 +18,6 @@ jobs:
           close-issue-message: 'This issue is being closed due to inactivity. If you are still experiencing this issue you can reopen it. If you have a new occurrence of a similar issue consider creating a new issue, you can reference this issue in the new issue if necessary.'
           stale-issue-label: 'status::stale'
           close-issue-label: 'status::closed'
-          any-of-labels: 'kind::inbound-escalation,inbound-escalation'
-          only-labels: 'status::pending'
+          any-of-labels: 'status::pending,status::stale'
+          only-labels: 'kind::inbound-escalation'
           debug-only: false
