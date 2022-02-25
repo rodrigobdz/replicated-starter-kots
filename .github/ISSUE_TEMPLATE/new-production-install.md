@@ -14,12 +14,12 @@ assignees: ''
 <!-- Define what "success" looks like for this end user, beyond just "getting the software up and running."  Example: we would like to have the customer up and running using our application within 2 weeks of target install time with 10 engineers enabled on the system -->
 
 ### Team
-- [ ] Vendor Technical Leads: 
-- [ ] Vendor Business Leads:
-- [ ] Replicated Technical Leads:
-- [ ] Replicated Business Leads:
-- [ ] Customer Technical Leads:
-- [ ] Customer Business Leads:
+- Vendor Technical Leads: 
+- Vendor Business Leads:
+- Replicated Technical Leads:
+- Replicated Business Leads:
+- Customer Technical Leads:
+- Customer Business Leads:
 
 ### Timeline and Next Steps
 <!-- Area to Track past engagements as well as next steps. Examples:
@@ -67,10 +67,10 @@ assignees: ''
 <!-- Any other details to note? -->
 
 ### Additional Tasks Required to Prepare for this installation
-<!-- Can include integration work from Packaging board, testing work, documentation work, planning calls or anything else.  Examples:
+<!-- Can include integration work from Packaging board, testing work, documentation work, planning calls or anything else. 
+  The below is meant to outline the bare minimum and is should be extended. -->
 
-- [ ] Discovery: [Outline Environment](#environment)
+- [ ] Discovery: Outline [Customer Environment](#environment)
 - [ ] Schedule Installation Date: 
-- [ ] Schedule pre-install huddle with Replicated CS team and Replicated Engineering Support
-- [ ] … etc****
--->
+- [ ] Schedule pre-install huddle with Replicated CS team
+- [ ] Create (and test in) a representative internal test environment based on information about [Customer Environment](#environment)
