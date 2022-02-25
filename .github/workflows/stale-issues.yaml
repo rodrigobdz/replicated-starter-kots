@@ -11,13 +11,13 @@ jobs:
       - uses: actions/stale@v4
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN}}
-          operations-per-run: 100
+          operations-per-run: 150
           days-before-stale: 4
           days-before-close: 2
-          stale-issue-message: 'This issue is being marked as stale due to inactivity and will be closed if it remains inactive.'
-          close-issue-message: 'This issue is being closed due to inactivity. If you are still experiencing this issue you can reopen it. If you have a new occurrence of a similar issue consider creating a new issue, you can reference this issue in the new issue if necessary.'
-          stale-issue-label: 'status::stale'
+          stale-issue-message: 'We noticed you haven’t updated us in a few days. In order to troubleshoot this issue further, we need some additional information. Please review the last request and let us know if you need assistance collecting the requested data.\nIn order to help ensure we can address ongoing issues effectively, we will archive this issue if we don’t hear from you in the next 2 days.'
+          close-issue-message: 'We haven’t heard back and are optimistic that indicates this issue is resolved. As such, we will close this case today to increase visibility of active issues.\nIf you are still experiencing this issue, please let us know by commenting with the additional information requested above and pressing the re-open button.\nIf you experience a similar issue or see this reoccur, please open a new support case and reference this one for historical data.'
+          stale-issue-label: 'status::inactive'
           close-issue-label: 'status::closed'
-          any-of-labels: 'status::pending,status::stale'
+          any-of-labels: 'status::pending,status::inactive,status::stale'
           only-labels: 'kind::inbound-escalation'
           debug-only: false
